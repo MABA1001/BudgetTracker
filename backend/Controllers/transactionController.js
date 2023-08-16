@@ -31,10 +31,23 @@ const deleteTransaction = async (req, res, next) => {
   }
 };
 
-// const updateTransaction = async (req, res, nexxt) => {};
+const updateTransaction = async (req, res, nexxt) => {
+  try {
+    const id = req.params.id;
+    const updatedData = req.body;
+
+    const result = await Transactions.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+    res.send(result);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 module.exports = {
   addTransaction,
   getAllTransactions,
   deleteTransaction,
+  updateTransaction,
 };
