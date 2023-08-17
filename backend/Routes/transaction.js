@@ -1,4 +1,5 @@
 const transactionRouter = require("express").Router();
+const { authUser } = require("../Middleware/authUser");
 const {
   addTransaction,
   getAllTransactions,
@@ -6,9 +7,9 @@ const {
   updateTransaction,
 } = require("./../Controllers/transactionController");
 
-transactionRouter.get("/", getAllTransactions);
-transactionRouter.post("/", addTransaction);
-transactionRouter.delete("/:id", deleteTransaction);
-transactionRouter.put("/:id", updateTransaction);
+transactionRouter.get("/", authUser, getAllTransactions);
+transactionRouter.post("/", authUser, addTransaction);
+transactionRouter.delete("/:id", authUser, deleteTransaction);
+transactionRouter.put("/:id", authUser, updateTransaction);
 
 module.exports = { transactionRouter };

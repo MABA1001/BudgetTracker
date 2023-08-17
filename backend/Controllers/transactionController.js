@@ -1,8 +1,9 @@
 const Transactions = require("./../Models/transactionModel");
 
-const addTransaction = async (req, res, next) => {
+const addTransaction = async (req, res) => {
   try {
     let newTransaction = await Transactions.create({
+      userId: req.user.id,
       ...req.body,
       date: new Date(),
     });
@@ -12,34 +13,50 @@ const addTransaction = async (req, res, next) => {
     res.status(401).send(error);
   }
 };
-const getAllTransactions = async (req, res, next) => {
+const getAllTransactions = async (req, res) => {
   try {
-    const data = await Transactions.find();
+    const data = await Transactions.find({ userId: req.user.id });
     res.send(data);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const deleteTransaction = async (req, res, next) => {
+const deleteTransaction = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await Transactions.findByIdAndDelete(id);
-    res.send(`Document with ${data.name} has been deleted..`);
+    const transaction = await Transactions.findById(id);
+    if (transaction.userId == req.user.id) {
+      await Transactions.deleteOne({ id: transaction.id });
+    } else {
+      return res.status(400).send({
+        status: "Bad Request",
+        message: "This transaction doesn't belong to you",
+      });
+    }
+    res.send(`Document with ${transaction.name} has been deleted..`);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-const updateTransaction = async (req, res, nexxt) => {
+const updateTransaction = async (req, res) => {
   try {
     const id = req.params.id;
     const updatedData = req.body;
-
-    const result = await Transactions.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    res.send(result);
+    const transaction = await Transactions.findById(id);
+    console.log(transaction);
+    if (transaction && transaction.userId == req.user.id) {
+      const result = await Transactions.findByIdAndUpdate(id, updatedData, {
+        new: true,
+      });
+      res.send(result);
+    } else {
+      return res.status(400).send({
+        status: "Bad Request",
+        message: "This transaction doesn't belong to you",
+      });
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

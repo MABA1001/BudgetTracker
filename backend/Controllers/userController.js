@@ -3,11 +3,8 @@ const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
   try {
-    // ... (previous code)
-
     const user = await Users.create(req.body);
 
-    // Create token
     const token = jwt.sign(
       { user_id: user.id, email: req.body.email }, // Use req.body.email here
       process.env.SECRET_TOKEN_KEY,
@@ -15,10 +12,8 @@ const registerUser = async (req, res) => {
         expiresIn: "2h",
       }
     );
-    // save user token
     user.token = token;
 
-    // return new user
     res.status(201).json(token);
   } catch (err) {
     if (err.code === 11000) {

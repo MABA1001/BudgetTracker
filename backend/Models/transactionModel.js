@@ -3,16 +3,20 @@ const mongoose = require("mongoose");
 const transactionSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   cost: {
     type: Number,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    required: true
-  }
+    required: true,
+  },
+  userId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Users",
+  },
 });
 
 const Transactions = mongoose.model("Transactions", transactionSchema);
