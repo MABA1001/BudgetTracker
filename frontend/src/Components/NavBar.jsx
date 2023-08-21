@@ -1,6 +1,5 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -13,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import budgetLogo from "./../assets/budgetLogo.png";
 import "./../App.css";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Dashboard", "Logout"];
 
 function NavBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -27,42 +26,41 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Avatar
-            alt="logo"
-            src={budgetLogo}
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} // Add your custom styles here
-          />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".2rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Budget Tracker
-          </Typography>
+    <AppBar position="static" sx={{ bgcolor: "white", color: "black" }}>
+      <Container maxWidth="xxl">
+        <Toolbar
+          disableGutters
+          sx={{ display: "flex", justifyContent: "space-between" }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Avatar
+              alt="logo"
+              src={budgetLogo}
+              sx={{ display: { md: "flex" }, marginRight: 1 }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".2rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              Budget Tracker
+            </Typography>
+          </div>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <div>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt="Remy Sharp"
-                  sx={{
-                    backgroundColor: "yellow",
-                    color: "black", // You might want to adjust the color for contrast
-                  }}
-                />
+                <Avatar alt="User" sx={{ bgcolor: "#FDC414" }} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -87,7 +85,7 @@ function NavBar() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </div>
         </Toolbar>
       </Container>
     </AppBar>
