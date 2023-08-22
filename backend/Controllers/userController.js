@@ -32,7 +32,7 @@ const loginUser = async (req, res) => {
     }
     const user = await Users.findOne({ email });
 
-    if (user && password === user.password) {
+    if (password === user?.password) {
       // Create token
       const token = jwt.sign(
         { user_id: user._id, email },

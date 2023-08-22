@@ -9,15 +9,34 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
+import { loginUser } from "../../Services/services";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function LogIn() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const response = await loginUser({
+        email: data.get("email"),
+        password: data.get("password"),
+      });
+      toast.success("Login Successfully !", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      localStorage.removeItem("userToken");
+      // localStorage.setItem("userToken", JSON.stringify(response.data));
+      navigate("/Dashboard");
+      console.log(response.data);
+    } catch (error) {
+      toast.error("Invalid Credentials !", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      console.error("An error occurred:", error);
+    }
   };
 
   return (
