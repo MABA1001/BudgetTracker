@@ -8,6 +8,8 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { useAuth } from "./../AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import budgetLogo from "./../assets/budgetLogo.png";
 import "./../App.css";
@@ -16,6 +18,8 @@ const settings = ["Profile", "Dashboard", "Logout"];
 
 function NavBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { token, removeAuthToken } = useAuth();
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -23,6 +27,12 @@ function NavBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    removeAuthToken();
+    localStorage.removeItem("userToken");
+    navigate("/");
   };
 
   return (
@@ -56,7 +66,7 @@ function NavBar() {
               Budget Tracker
             </Typography>
           </div>
-          {localStorage.getItem("userToken") ? (
+          {token ? (
             <div>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -81,7 +91,12 @@ function NavBar() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem
+                    key={setting}
+                    onClick={
+                      setting === "Logout" ? handleLogout : handleCloseUserMenu
+                    }
+                  >
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}

@@ -12,8 +12,10 @@ import { Container } from "@mui/material";
 import { loginUser } from "../../Services/services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./../AuthContext";
 
 export default function LogIn() {
+  const { token, setAuthToken } = useAuth();
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,8 +29,8 @@ export default function LogIn() {
       toast.success("Login Successfully !", {
         position: toast.POSITION.TOP_RIGHT,
       });
-      localStorage.removeItem("userToken");
       localStorage.setItem("userToken", JSON.stringify(response.data));
+      setAuthToken(JSON.stringify(response.data));
       navigate("/Dashboard");
     } catch (error) {
       toast.error("Invalid Credentials !", {
