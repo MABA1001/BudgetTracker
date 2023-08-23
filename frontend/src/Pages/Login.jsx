@@ -28,9 +28,8 @@ export default function LogIn() {
         position: toast.POSITION.TOP_RIGHT,
       });
       localStorage.removeItem("userToken");
-      // localStorage.setItem("userToken", JSON.stringify(response.data));
+      localStorage.setItem("userToken", JSON.stringify(response.data));
       navigate("/Dashboard");
-      console.log(response.data);
     } catch (error) {
       toast.error("Invalid Credentials !", {
         position: toast.POSITION.TOP_CENTER,

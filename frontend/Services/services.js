@@ -9,12 +9,16 @@ export function loginUser(user) {
 }
 
 export function signupUser(user) {
-  return api.post("/user", user);
+  return api.post("/user/signup", user);
 }
 
 // TRANSACTIONS
 export function getTransactions() {
-  return api.get("/transactions");
+  return api.get("/transaction", {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("userToken"))}`,
+    },
+  });
 }
 
 export function createTransaction(transaction) {

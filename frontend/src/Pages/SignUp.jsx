@@ -11,8 +11,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { signupUser } from "../../Services/services";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const validationSchema = Yup.object({
     firstName: Yup.string()
       .matches(/^[a-zA-Z]*$/, "First name should only contain letters")
@@ -41,12 +45,35 @@ export default function SignUp() {
     budgetLimit: "",
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    setSubmitting(true); // Set submitting state to true
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      setSubmitting(true);
 
-    console.log(values);
-    resetForm();
-    setSubmitting(false);
+      const response = await signupUser(values); // Assuming signupUser is a function that handles the signup process
+
+      if (response && response.data) {
+        console.log(response.data);
+        // localStorage.setItem("userToken", JSON.stringify(response.data));
+        toast.success("Account Created Successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        navigate("/Dashboard");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        toast.error("Email Already in Use", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      } else {
+        // Handle other errors
+        toast.error("An error occurred. Please try again later.", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
+    } finally {
+      setSubmitting(false);
+      resetForm();
+    }
   };
 
   const formik = useFormik({
