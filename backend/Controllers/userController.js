@@ -41,7 +41,7 @@ const loginUser = async (req, res) => {
           expiresIn: "2h",
         }
       );
-      res.status(200).json(token);
+      return res.status(200).json(token);
     }
     res.status(400).send("Invalid Credentials");
   } catch (err) {

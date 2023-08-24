@@ -9,17 +9,22 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { getTransactions } from "../../Services/services";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
 import BudgetModal from "../Components/BudgetModel";
+import ActionMenu from "../Components/ActionsMenue";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Dashboard() {
   const [transactionData, SetTransactionData] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [dateFilter, setDateFilter] = React.useState(dayjs(new Date()));
   const columns = [
     { id: "name", label: "Name" },
     { id: "cost", label: "Price" },
@@ -56,6 +61,21 @@ export default function Dashboard() {
     setModalOpen(false);
   };
 
+  const handleUpdatedData = (row) => {
+    SetTransactionData((prevTrans) => {
+      prevTrans.push(row);
+      return prevTrans;
+    });
+  };
+
+  const handledeleteRecord = (id) => {
+    SetTransactionData((prevTrasactions) =>
+      prevTrasactions.filter((trans) => trans._id !== id)
+    );
+  };
+
+  const hanldeEditRecord = () => {};
+
   return (
     <Paper sx={{ width: "80%", margin: "auto", mt: "5%", mb: "5%" }}>
       <Box
@@ -67,18 +87,18 @@ export default function Dashboard() {
         }}
       >
         <Box>
-          <TextField
-            label="Filter by Date"
-            type="date"
-            value={null}
-            // onChange={handleFilterChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <Button variant="contained" color="primary">
-            Filter Records
-          </Button>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DatePicker"]}>
+              <DatePicker
+                label="Filter by date"
+                value={dateFilter}
+                onChange={(newValue) => setDateFilter(newValue)}
+              />
+              <Button variant="contained" color="primary">
+                Filter Records
+              </Button>
+            </DemoContainer>
+          </LocalizationProvider>
         </Box>
         <Button
           variant="contained"
@@ -114,9 +134,14 @@ export default function Dashboard() {
                       return (
                         <TableCell key={column.id}>
                           {column.id === "actions" ? (
-                            <IconButton>
-                              <MoreVertIcon />
-                            </IconButton>
+                            <ActionMenu
+                              transactionId={row._id}
+                              transaction={row}
+                              updateRecordOnEdit={hanldeEditRecord}
+                              updateRecordOnDelete={handledeleteRecord}
+                            />
+                          ) : column.id === "date" ? (
+                            value.split("T")[0]
                           ) : (
                             value
                           )}
@@ -138,7 +163,11 @@ export default function Dashboard() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <BudgetModal open={modalOpen} onClose={handleCloseModal} />
+      <BudgetModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        updatetransactionRecord={handleUpdatedData}
+      />
     </Paper>
   );
 }

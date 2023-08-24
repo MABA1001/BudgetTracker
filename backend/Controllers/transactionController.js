@@ -27,14 +27,14 @@ const deleteTransaction = async (req, res) => {
     const id = req.params.id;
     const transaction = await Transactions.findById(id);
     if (transaction.userId == req.user.id) {
-      await Transactions.deleteOne({ id: transaction.id });
+      await Transactions.deleteOne({ _id: transaction._id });
     } else {
       return res.status(400).send({
         status: "Bad Request",
         message: "This transaction doesn't belong to you",
       });
     }
-    res.send(`Document with ${transaction.name} has been deleted..`);
+    res.send(`Document with ${transaction.name} has bee2n deleted..`);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -45,12 +45,11 @@ const updateTransaction = async (req, res) => {
     const id = req.params.id;
     const updatedData = req.body;
     const transaction = await Transactions.findById(id);
-    console.log(transaction);
     if (transaction && transaction.userId == req.user.id) {
       const result = await Transactions.findByIdAndUpdate(id, updatedData, {
         new: true,
       });
-      res.send(result);
+      return res.send(result);
     } else {
       return res.status(400).send({
         status: "Bad Request",

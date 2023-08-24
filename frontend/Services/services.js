@@ -22,13 +22,24 @@ export function getTransactions() {
 }
 
 export function createTransaction(transaction) {
-  return api.post("/transactions", transaction);
+  return api.post("/transaction", transaction, {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("userToken"))}`,
+    },
+  });
 }
 
 export function updateTransaction(id, transaction) {
-  return api.put(`/transactions/${id}`, transaction);
+  return api.put(`/transaction/${id}`, transaction, {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("userToken"))}`,
+    },
+  });
 }
-
 export function deleteTransaction(id) {
-  return api.delete(`/transactions/${id}`);
+  return api.delete(`/transaction/${id}`, {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("userToken"))}`,
+    },
+  });
 }

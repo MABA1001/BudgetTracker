@@ -10,25 +10,23 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { format } from "date-fns";
-import { createTransaction } from "../../Services/services";
+import { createTransaction, updateTransaction } from "../../Services/services";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   cost: Yup.number().required("Price is required"),
 });
 
-const BudgetModal = ({ open, onClose, updatetransactionRecord }) => {
+const EditModal = ({ open, onClose, data }) => {
   const initialValues = {
-    name: "",
-    cost: "",
-    date: format(new Date(), "yyyy-MM-dd"),
+    name: data.name,
+    cost: data.cost,
+    date: data.date.split("T")[0],
   };
-
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      await createTransaction(values);
-      updatetransactionRecord(values);
+      await updateTransaction(data._id, values);
+      //   updatetransactionRecord(values);
       formik.resetForm();
       onClose();
     } catch (error) {
@@ -66,7 +64,7 @@ const BudgetModal = ({ open, onClose, updatetransactionRecord }) => {
           <CloseIcon />
         </IconButton>
         <Typography variant="h5" component="div" gutterBottom>
-          Add Budget
+          Update Budget
         </Typography>
         <form onSubmit={formik.handleSubmit}>
           <TextField
@@ -87,7 +85,7 @@ const BudgetModal = ({ open, onClose, updatetransactionRecord }) => {
             name="cost"
             label="Price"
             type="number"
-            value={formik.values.price}
+            value={formik.values.cost}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.cost && Boolean(formik.errors.cost)}
@@ -117,4 +115,4 @@ const BudgetModal = ({ open, onClose, updatetransactionRecord }) => {
   );
 };
 
-export default BudgetModal;
+export default EditModal;
