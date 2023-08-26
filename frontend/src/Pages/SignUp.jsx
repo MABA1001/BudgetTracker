@@ -57,7 +57,7 @@ export default function SignUp() {
         toast.success("Account Created Successfully!", {
           position: toast.POSITION.TOP_RIGHT,
         });
-        navigate("/Dashboard");
+        navigate("/");
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {

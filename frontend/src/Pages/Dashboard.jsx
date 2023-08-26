@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { getTransactions } from "../../Services/services";
+import { getTransactions, updateTransaction } from "../../Services/services";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
@@ -25,6 +25,8 @@ export default function Dashboard() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dateFilter, setDateFilter] = React.useState(dayjs(new Date()));
+  const [filteredData, setFilteredData] = useState([]);
+  const [update, setUpdate] = useState(false);
   const columns = [
     { id: "name", label: "Name" },
     { id: "cost", label: "Price" },
@@ -37,6 +39,7 @@ export default function Dashboard() {
       try {
         const response = await getTransactions();
         SetTransactionData(response.data);
+        setFilteredData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -74,16 +77,38 @@ export default function Dashboard() {
     );
   };
 
-  const hanldeEditRecord = () => {};
+  const hanldeEditRecord = () => {
+    fetchData();
+  };
+
+  const handleFilterClick = async () => {
+    const filteredTransactions = transactionData.filter((transaction) => {
+      const transactionDate = dayjs(transaction.date.split("T")[0]);
+      return transactionDate.isSame(dateFilter, "day");
+    });
+    setFilteredData(filteredTransactions);
+
+    // Reset the pagination to the first page
+    setPage(0);
+  };
 
   return (
-    <Paper sx={{ width: "80%", margin: "auto", mt: "5%", mb: "5%" }}>
+    <Paper
+      sx={{
+        width: "80%",
+        margin: "auto",
+        mt: "5%",
+        mb: "5%",
+        padding: "20px",
+        borderRadius: "10px",
+      }}
+    >
       <Box
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "16px",
+          marginBottom: "20px",
         }}
       >
         <Box>
@@ -94,7 +119,11 @@ export default function Dashboard() {
                 value={dateFilter}
                 onChange={(newValue) => setDateFilter(newValue)}
               />
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                onClick={handleFilterClick}
+                sx={{ bgcolor: "#FDC414", color: "black" }}
+              >
                 Filter Records
               </Button>
             </DemoContainer>
@@ -104,11 +133,19 @@ export default function Dashboard() {
           variant="contained"
           color="secondary"
           onClick={handleAddBudgetClick}
+          sx={{ bgcolor: "black", height: "60px" }}
         >
           Add Budget
         </Button>
       </Box>
-      <TableContainer sx={{ maxHeight: 440 }}>
+
+      <TableContainer
+        sx={{
+          maxHeight: "440px",
+          border: "1px solid #c8c4c4",
+          borderRadius: "5px",
+        }}
+      >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -124,7 +161,7 @@ export default function Dashboard() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {transactionData
+            {filteredData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, rowIndex) => {
                 return (

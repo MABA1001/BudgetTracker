@@ -29,6 +29,7 @@ export default function ActionMenu({
 
   const onEditClick = () => {
     setModalOpen(true);
+    handleClose();
   };
 
   const onDeleteClick = async () => {
@@ -37,6 +38,8 @@ export default function ActionMenu({
       updateRecordOnDelete(transactionId);
     } catch (error) {
       console.error("Error creating transaction:", error);
+    } finally {
+      handleClose();
     }
   };
 

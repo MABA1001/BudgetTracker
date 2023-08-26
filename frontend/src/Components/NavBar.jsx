@@ -35,6 +35,10 @@ function NavBar() {
     navigate("/");
   };
 
+  const handleDashboard = () => {
+    navigate("/Dashboard");
+  };
+
   return (
     <AppBar position="static" sx={{ bgcolor: "white", color: "black" }}>
       <Container maxWidth="xxl">
@@ -93,9 +97,15 @@ function NavBar() {
                 {settings.map((setting) => (
                   <MenuItem
                     key={setting}
-                    onClick={
-                      setting === "Logout" ? handleLogout : handleCloseUserMenu
-                    }
+                    onClick={() => {
+                      if (setting === "Logout") {
+                        handleLogout();
+                      } else if (setting === "Dashboard") {
+                        handleDashboard();
+                      } else {
+                        handleCloseUserMenu();
+                      }
+                    }}
                   >
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
