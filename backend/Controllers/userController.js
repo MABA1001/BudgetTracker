@@ -49,4 +49,32 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const getUserDetails = async (req, res) => {
+  try {
+    // Get the user's ID from the token
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
+    const userId = decodedToken.user_id;
+
+    // Find the user by ID and select specific fields
+    const user = await Users.findById(userId).select(
+      "firstName email budgetLimit"
+    );
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Return user details
+    res.status(200).json({
+      firstName: user.firstName,
+      email: user.email,
+      budgetLimit: user.budgetLimit,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports = { registerUser, loginUser, getUserDetails };

@@ -8,7 +8,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { getTransactions, updateTransaction } from "../../Services/services";
+import { toast } from "react-toastify";
+import {
+  getTransactions,
+  getUserDetail,
+  updateTransaction,
+} from "../../Services/services";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
@@ -26,7 +31,7 @@ export default function Dashboard() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dateFilter, setDateFilter] = React.useState(dayjs(new Date()));
   const [filteredData, setFilteredData] = useState([]);
-  const [update, setUpdate] = useState(false);
+  const [useDetails, SetUserDetails] = useState({});
   const columns = [
     { id: "name", label: "Name" },
     { id: "cost", label: "Price" },
@@ -46,6 +51,18 @@ export default function Dashboard() {
     }
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const userResponse = await getUserDetail();
+        SetUserDetails(userResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchUserData();
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -69,16 +86,28 @@ export default function Dashboard() {
       prevTrans.push(row);
       return prevTrans;
     });
+    checkLimit();
   };
 
   const handledeleteRecord = (id) => {
     SetTransactionData((prevTrasactions) =>
       prevTrasactions.filter((trans) => trans._id !== id)
     );
+    setFilteredData((prevTrasactions) =>
+      prevTrasactions.filter((trans) => trans._id !== id)
+    );
   };
 
-  const hanldeEditRecord = () => {
-    fetchData();
+  const hanldeEditRecord = async () => {
+    try {
+      const response = await getTransactions();
+      SetTransactionData(response.data);
+      setFilteredData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      checkLimit();
+    }
   };
 
   const handleFilterClick = async () => {
@@ -87,9 +116,20 @@ export default function Dashboard() {
       return transactionDate.isSame(dateFilter, "day");
     });
     setFilteredData(filteredTransactions);
-
-    // Reset the pagination to the first page
     setPage(0);
+  };
+
+  const checkLimit = () => {
+    const sum = transactionData.reduce((total, currentObject) => {
+      return total + currentObject.cost;
+    }, 0);
+    if (useDetails.budgetLimit < sum) {
+      toast.warning(`Budget Limit Exceeded from ${useDetails.budgetLimit} `, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } else {
+      console.log("NO");
+    }
   };
 
   return (

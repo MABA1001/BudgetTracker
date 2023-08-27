@@ -12,6 +12,14 @@ export function signupUser(user) {
   return api.post("/user/signup", user);
 }
 
+export function getUserDetail() {
+  return api.get("/user", {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("userToken"))}`,
+    },
+  });
+}
+
 // TRANSACTIONS
 export function getTransactions() {
   return api.get("/transaction", {

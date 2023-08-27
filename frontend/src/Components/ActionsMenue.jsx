@@ -14,6 +14,7 @@ export default function ActionMenu({
   transactionId,
   updateRecordOnDelete,
   transaction,
+  updateRecordOnEdit,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -76,6 +77,7 @@ export default function ActionMenu({
         open={modalOpen}
         onClose={handleCloseModal}
         data={transaction}
+        updatetransactionRecord={() => updateRecordOnEdit()}
       />
     </Box>
   );
