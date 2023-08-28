@@ -1,48 +1,48 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { signupUser } from "../../Services/services";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { signupUser } from '../../Services/services';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const validationSchema = Yup.object({
     firstName: Yup.string()
-      .matches(/^[a-zA-Z]*$/, "First name should only contain letters")
-      .required("First name is required"),
+      .matches(/^[a-zA-Z]*$/, 'First name should only contain letters')
+      .required('First name is required'),
     lastName: Yup.string()
-      .matches(/^[a-zA-Z]*$/, "Lastname should only contain letters")
-      .required("Last name is required"),
+      .matches(/^[a-zA-Z]*$/, 'Lastname should only contain letters')
+      .required('Last name is required'),
     email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+      .email('Invalid email address')
+      .required('Email is required'),
     password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Password is required"),
+      .min(8, 'Password must be at least 8 characters')
+      .required('Password is required'),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
-    budgetLimit: Yup.number().required("Budget Limit is required"),
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm Password is required'),
+    budgetLimit: Yup.number().required('Budget Limit is required')
   });
 
   const initialValues = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    budgetLimit: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    budgetLimit: ''
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -54,20 +54,20 @@ export default function SignUp() {
       if (response && response.data) {
         console.log(response.data);
         // localStorage.setItem("userToken", JSON.stringify(response.data));
-        toast.success("Account Created Successfully!", {
-          position: toast.POSITION.TOP_RIGHT,
+        toast.success('Account Created Successfully!', {
+          position: toast.POSITION.TOP_RIGHT
         });
-        navigate("/");
+        navigate('/');
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        toast.error("Email Already in Use", {
-          position: toast.POSITION.TOP_CENTER,
+        toast.error('Email Already in Use', {
+          position: toast.POSITION.TOP_CENTER
         });
       } else {
         // Handle other errors
-        toast.error("An error occurred. Please try again later.", {
-          position: toast.POSITION.TOP_CENTER,
+        toast.error('An error occurred. Please try again later.', {
+          position: toast.POSITION.TOP_CENTER
         });
       }
     } finally {
@@ -79,7 +79,7 @@ export default function SignUp() {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: handleSubmit,
+    onSubmit: handleSubmit
   });
 
   return (
@@ -87,10 +87,10 @@ export default function SignUp() {
       container
       component="main"
       sx={{
-        width: "50%",
-        margin: "auto",
-        mt: "20px",
-        borderRadius: "10px",
+        width: '50%',
+        margin: 'auto',
+        mt: '20px',
+        borderRadius: '10px'
       }}
     >
       <CssBaseline />
@@ -100,10 +100,10 @@ export default function SignUp() {
         sm={false}
         md={4}
         sx={{
-          bgcolor: "#FDC414",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          bgcolor: '#FDC414',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
         }}
       />
       <Grid item xs={12} sm={12} md={8} component={Paper} elevation={6} square>
@@ -111,12 +111,12 @@ export default function SignUp() {
           sx={{
             my: 8,
             mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "#FDC414" }}>
+          <Avatar sx={{ m: 1, bgcolor: '#FDC414' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -149,6 +149,7 @@ export default function SignUp() {
                   }
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -244,7 +245,7 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: "#FDC414" }}
+              sx={{ mt: 3, mb: 2, bgcolor: '#FDC414' }}
               disabled={formik.isSubmitting || !formik.isValid}
             >
               Sign Up

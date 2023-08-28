@@ -10,7 +10,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { createTransaction, updateTransaction } from "../../Services/services";
+import { updateTransaction } from "../../Services/services";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -26,7 +26,6 @@ const EditModal = ({ open, onClose, data, updatetransactionRecord }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await updateTransaction(data._id, values);
-      //   updatetransactionRecord(values);
       formik.resetForm();
       onClose();
     } catch (error) {

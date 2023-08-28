@@ -82,10 +82,8 @@ export default function Dashboard() {
   };
 
   const handleUpdatedData = (row) => {
-    SetTransactionData((prevTrans) => {
-      prevTrans.push(row);
-      return prevTrans;
-    });
+    SetTransactionData((prevTrans) => [...prevTrans, row]);
+    setFilteredData((prevTrans) => [...prevTrans, row]);
     checkLimit();
   };
 
@@ -103,6 +101,7 @@ export default function Dashboard() {
       const response = await getTransactions();
       SetTransactionData(response.data);
       setFilteredData(response.data);
+      console.log("3");
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -127,8 +126,6 @@ export default function Dashboard() {
       toast.warning(`Budget Limit Exceeded from ${useDetails.budgetLimit} `, {
         position: toast.POSITION.TOP_RIGHT,
       });
-    } else {
-      console.log("NO");
     }
   };
 

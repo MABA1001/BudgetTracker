@@ -5,7 +5,7 @@ const addTransaction = async (req, res) => {
     let newTransaction = await Transactions.create({
       userId: req.user.id,
       ...req.body,
-      date: new Date(),
+      date: new Date().toISOString(),
     });
     res.status(200).send(newTransaction);
   } catch (error) {
