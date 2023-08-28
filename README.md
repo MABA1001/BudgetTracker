@@ -33,21 +33,14 @@ cd backend
 npm install
 ```
 
-3. **Navigate to the backend directory and install backend dependencies:**
+3. **Similarly, navigate to the frontend directory and install frontend dependencies:**
 
 ```sh
 cd backend
 npm install
 ```
 
-4. **Similarly, navigate to the frontend directory and install frontend dependencies:**
-
-```sh
-cd backend
-npm install
-```
-
-5. **Set Environment Variables:**
+4. **Set Environment Variables:**
    In the backend directory, create a .env file and set the following:
 
 ```sh
