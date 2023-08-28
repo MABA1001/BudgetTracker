@@ -1,27 +1,27 @@
-import React from "react";
+import React from 'react';
 import {
   Modal,
   Box,
   Typography,
   IconButton,
   TextField,
-  Button,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { updateTransaction } from "../../Services/services";
+  Button
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { updateTransaction } from '../Services/services';
 
 const validationSchema = Yup.object({
-  name: Yup.string().required("Name is required"),
-  cost: Yup.number().required("Price is required"),
+  name: Yup.string().required('Name is required'),
+  cost: Yup.number().required('Price is required')
 });
 
 const EditModal = ({ open, onClose, data, updatetransactionRecord }) => {
   const initialValues = {
     name: data.name,
     cost: data.cost,
-    date: data.date.split("T")[0],
+    date: data.date.split('T')[0]
   };
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -29,7 +29,7 @@ const EditModal = ({ open, onClose, data, updatetransactionRecord }) => {
       formik.resetForm();
       onClose();
     } catch (error) {
-      console.error("Error creating transaction:", error);
+      console.error('Error creating transaction:', error);
     } finally {
       setSubmitting(false);
       updatetransactionRecord();
@@ -39,27 +39,27 @@ const EditModal = ({ open, onClose, data, updatetransactionRecord }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: handleSubmit,
+    onSubmit: handleSubmit
   });
 
   return (
     <Modal open={open} onClose={onClose}>
       <Box
         sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
           width: 400,
-          bgcolor: "background.paper",
+          bgcolor: 'background.paper',
           boxShadow: 24,
-          p: 4,
+          p: 4
         }}
       >
         <IconButton
           aria-label="close"
           onClick={onClose}
-          sx={{ position: "absolute", right: 8, top: 8 }}
+          sx={{ position: 'absolute', right: 8, top: 8 }}
         >
           <CloseIcon />
         </IconButton>

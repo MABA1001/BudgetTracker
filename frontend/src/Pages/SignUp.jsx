@@ -11,7 +11,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { signupUser } from '../../Services/services';
+import { signupUser } from '../Services/services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 

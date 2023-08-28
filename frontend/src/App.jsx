@@ -5,7 +5,7 @@ import LogIn from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import Dashboard from './Pages/Dashboard';
 import NoPage from './Pages/NoPage';
-import { useAuth } from './AuthContext';
+import { useAuth } from './Context/AuthContext';
 import Analytics from './Pages/Analytics';
 import { useState } from 'react';
 

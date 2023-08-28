@@ -1,42 +1,42 @@
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import { Container } from "@mui/material";
-import { loginUser } from "../../Services/services";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "./../AuthContext";
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { Container } from '@mui/material';
+import { loginUser } from '../Services/services';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './../Context/AuthContext';
 
 export default function LogIn() {
   const { token, setAuthToken } = useAuth();
   const navigate = useNavigate();
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
     try {
       const response = await loginUser({
-        email: data.get("email"),
-        password: data.get("password"),
+        email: data.get('email'),
+        password: data.get('password')
       });
-      toast.success("Login Successfully !", {
-        position: toast.POSITION.TOP_RIGHT,
+      toast.success('Login Successfully !', {
+        position: toast.POSITION.TOP_RIGHT
       });
-      localStorage.setItem("userToken", JSON.stringify(response.data));
+      localStorage.setItem('userToken', JSON.stringify(response.data));
       setAuthToken(JSON.stringify(response.data));
-      navigate("/Dashboard");
+      navigate('/Dashboard');
     } catch (error) {
-      toast.error("Invalid Credentials !", {
-        position: toast.POSITION.TOP_CENTER,
+      toast.error('Invalid Credentials !', {
+        position: toast.POSITION.TOP_CENTER
       });
-      console.error("An error occurred:", error);
+      console.error('An error occurred:', error);
     }
   };
 
@@ -45,7 +45,7 @@ export default function LogIn() {
       <Box
         sx={{
           marginTop: 5,
-          marginBottom: 5,
+          marginBottom: 5
         }}
       >
         <Grid container>
@@ -56,10 +56,10 @@ export default function LogIn() {
             sm={4}
             md={4}
             sx={{
-              backgroundColor: "#FDC414",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundColor: '#FDC414',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
             }}
           />
           <Grid
@@ -75,9 +75,9 @@ export default function LogIn() {
               sx={{
                 my: 8,
                 mx: 4,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
               }}
             >
               <Typography component="h1" variant="h5">
@@ -117,7 +117,7 @@ export default function LogIn() {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2, bgcolor: "#FDC414" }}
+                  sx={{ mt: 3, mb: 2, bgcolor: '#FDC414' }}
                 >
                   Sign In
                 </Button>

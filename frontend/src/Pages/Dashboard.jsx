@@ -1,29 +1,29 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import { toast } from "react-toastify";
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import { toast } from 'react-toastify';
 import {
   getTransactions,
   getUserDetail,
-  updateTransaction,
-} from "../../Services/services";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { Box } from "@mui/material";
-import BudgetModal from "../Components/BudgetModel";
-import ActionMenu from "../Components/ActionsMenue";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+  updateTransaction
+} from '../Services/services';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { Box } from '@mui/material';
+import BudgetModal from '../Components/BudgetModel';
+import ActionMenu from '../Components/ActionsMenue';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export default function Dashboard() {
   const [transactionData, SetTransactionData] = React.useState([]);
@@ -33,10 +33,10 @@ export default function Dashboard() {
   const [filteredData, setFilteredData] = useState([]);
   const [useDetails, SetUserDetails] = useState({});
   const columns = [
-    { id: "name", label: "Name" },
-    { id: "cost", label: "Price" },
-    { id: "date", label: "Date" },
-    { id: "actions", label: "Actions" }, // Add this line
+    { id: 'name', label: 'Name' },
+    { id: 'cost', label: 'Price' },
+    { id: 'date', label: 'Date' },
+    { id: 'actions', label: 'Actions' } // Add this line
   ];
   const [modalOpen, setModalOpen] = useState(false);
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Dashboard() {
         SetTransactionData(response.data);
         setFilteredData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     }
 
@@ -59,7 +59,7 @@ export default function Dashboard() {
         const userResponse = await getUserDetail();
         SetUserDetails(userResponse.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     }
     fetchUserData();
@@ -69,7 +69,7 @@ export default function Dashboard() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
@@ -81,18 +81,18 @@ export default function Dashboard() {
     setModalOpen(false);
   };
 
-  const handleUpdatedData = (row) => {
-    SetTransactionData((prevTrans) => [...prevTrans, row]);
-    setFilteredData((prevTrans) => [...prevTrans, row]);
+  const handleUpdatedData = row => {
+    SetTransactionData(prevTrans => [...prevTrans, row]);
+    setFilteredData(prevTrans => [...prevTrans, row]);
     checkLimit();
   };
 
-  const handledeleteRecord = (id) => {
-    SetTransactionData((prevTrasactions) =>
-      prevTrasactions.filter((trans) => trans._id !== id)
+  const handledeleteRecord = id => {
+    SetTransactionData(prevTrasactions =>
+      prevTrasactions.filter(trans => trans._id !== id)
     );
-    setFilteredData((prevTrasactions) =>
-      prevTrasactions.filter((trans) => trans._id !== id)
+    setFilteredData(prevTrasactions =>
+      prevTrasactions.filter(trans => trans._id !== id)
     );
   };
 
@@ -101,18 +101,18 @@ export default function Dashboard() {
       const response = await getTransactions();
       SetTransactionData(response.data);
       setFilteredData(response.data);
-      console.log("3");
+      console.log('3');
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     } finally {
       checkLimit();
     }
   };
 
   const handleFilterClick = async () => {
-    const filteredTransactions = transactionData.filter((transaction) => {
-      const transactionDate = dayjs(transaction.date.split("T")[0]);
-      return transactionDate.isSame(dateFilter, "day");
+    const filteredTransactions = transactionData.filter(transaction => {
+      const transactionDate = dayjs(transaction.date.split('T')[0]);
+      return transactionDate.isSame(dateFilter, 'day');
     });
     setFilteredData(filteredTransactions);
     setPage(0);
@@ -124,7 +124,7 @@ export default function Dashboard() {
     }, 0);
     if (useDetails.budgetLimit < sum) {
       toast.warning(`Budget Limit Exceeded from ${useDetails.budgetLimit} `, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: toast.POSITION.TOP_RIGHT
       });
     }
   };
@@ -132,34 +132,34 @@ export default function Dashboard() {
   return (
     <Paper
       sx={{
-        width: "80%",
-        margin: "auto",
-        mt: "5%",
-        mb: "5%",
-        padding: "20px",
-        borderRadius: "10px",
+        width: '80%',
+        margin: 'auto',
+        mt: '5%',
+        mb: '5%',
+        padding: '20px',
+        borderRadius: '10px'
       }}
     >
       <Box
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px'
         }}
       >
         <Box>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DatePicker"]}>
+            <DemoContainer components={['DatePicker']}>
               <DatePicker
                 label="Filter by date"
                 value={dateFilter}
-                onChange={(newValue) => setDateFilter(newValue)}
+                onChange={newValue => setDateFilter(newValue)}
               />
               <Button
                 variant="contained"
                 onClick={handleFilterClick}
-                sx={{ bgcolor: "#FDC414", color: "black" }}
+                sx={{ bgcolor: '#FDC414', color: 'black' }}
               >
                 Filter Records
               </Button>
@@ -170,7 +170,7 @@ export default function Dashboard() {
           variant="contained"
           color="secondary"
           onClick={handleAddBudgetClick}
-          sx={{ bgcolor: "black", height: "60px" }}
+          sx={{ bgcolor: 'black', height: '60px' }}
         >
           Add Budget
         </Button>
@@ -178,15 +178,15 @@ export default function Dashboard() {
 
       <TableContainer
         sx={{
-          maxHeight: "440px",
-          border: "1px solid #c8c4c4",
-          borderRadius: "5px",
+          maxHeight: '440px',
+          border: '1px solid #c8c4c4',
+          borderRadius: '5px'
         }}
       >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {columns.map(column => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -203,19 +203,19 @@ export default function Dashboard() {
               .map((row, rowIndex) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={rowIndex}>
-                    {columns.map((column) => {
+                    {columns.map(column => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id}>
-                          {column.id === "actions" ? (
+                          {column.id === 'actions' ? (
                             <ActionMenu
                               transactionId={row._id}
                               transaction={row}
                               updateRecordOnEdit={hanldeEditRecord}
                               updateRecordOnDelete={handledeleteRecord}
                             />
-                          ) : column.id === "date" ? (
-                            value.split("T")[0]
+                          ) : column.id === 'date' ? (
+                            value.split('T')[0]
                           ) : (
                             value
                           )}
