@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
   cost: Yup.number().required('Price is required')
 });
 
-const EditModal = ({ open, onClose, data, updatetransactionRecord }) => {
+const EditModal = ({ open, onClose, data, updateTransactionRecord }) => {
   const initialValues = {
     name: data.name,
     cost: data.cost,
@@ -32,7 +32,7 @@ const EditModal = ({ open, onClose, data, updatetransactionRecord }) => {
       console.error('Error creating transaction:', error);
     } finally {
       setSubmitting(false);
-      updatetransactionRecord();
+      updateTransactionRecord();
     }
   };
 

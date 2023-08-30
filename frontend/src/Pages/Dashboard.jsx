@@ -9,21 +9,17 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { toast } from 'react-toastify';
-import {
-  getTransactions,
-  getUserDetail,
-  updateTransaction
-} from '../Services/services';
-import TextField from '@mui/material/TextField';
+import { getTransactions } from '../Services/services';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
-import BudgetModal from '../Components/BudgetModel';
-import ActionMenu from '../Components/ActionsMenue';
+import BudgetModal from '../Components/BudgetModal';
+import ActionMenu from '../Components/ActionMenu';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useUserDetail } from './../Context/userDetailContext';
 
 export default function Dashboard() {
   const [transactionData, SetTransactionData] = React.useState([]);
@@ -31,12 +27,13 @@ export default function Dashboard() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dateFilter, setDateFilter] = React.useState(dayjs(new Date()));
   const [filteredData, setFilteredData] = useState([]);
-  const [useDetails, SetUserDetails] = useState({});
+  const { userDetail } = useUserDetail();
+
   const columns = [
     { id: 'name', label: 'Name' },
     { id: 'cost', label: 'Price' },
     { id: 'date', label: 'Date' },
-    { id: 'actions', label: 'Actions' } // Add this line
+    { id: 'actions', label: 'Actions' }
   ];
   const [modalOpen, setModalOpen] = useState(false);
   useEffect(() => {
@@ -51,18 +48,6 @@ export default function Dashboard() {
     }
 
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const userResponse = await getUserDetail();
-        SetUserDetails(userResponse.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    fetchUserData();
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -87,7 +72,7 @@ export default function Dashboard() {
     checkLimit();
   };
 
-  const handledeleteRecord = id => {
+  const handleDeleteRecord = id => {
     SetTransactionData(prevTrasactions =>
       prevTrasactions.filter(trans => trans._id !== id)
     );
@@ -101,7 +86,6 @@ export default function Dashboard() {
       const response = await getTransactions();
       SetTransactionData(response.data);
       setFilteredData(response.data);
-      console.log('3');
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -122,10 +106,13 @@ export default function Dashboard() {
     const sum = transactionData.reduce((total, currentObject) => {
       return total + currentObject.cost;
     }, 0);
-    if (useDetails.budgetLimit < sum) {
-      toast.warning(`Budget Limit Exceeded from ${useDetails.budgetLimit} `, {
-        position: toast.POSITION.TOP_RIGHT
-      });
+    if (userDetail.budgetLimit < sum) {
+      toast.warning(
+        `${userDetail.firstName} Budget Limit Exceeded from ${userDetail.budgetLimit} `,
+        {
+          position: toast.POSITION.TOP_RIGHT
+        }
+      );
     }
   };
 
@@ -212,7 +199,7 @@ export default function Dashboard() {
                               transactionId={row._id}
                               transaction={row}
                               updateRecordOnEdit={hanldeEditRecord}
-                              updateRecordOnDelete={handledeleteRecord}
+                              updateRecordOnDelete={handleDeleteRecord}
                             />
                           ) : column.id === 'date' ? (
                             value.split('T')[0]
@@ -240,7 +227,7 @@ export default function Dashboard() {
       <BudgetModal
         open={modalOpen}
         onClose={handleCloseModal}
-        updatetransactionRecord={handleUpdatedData}
+        updateTransactionRecord={handleUpdatedData}
       />
     </Paper>
   );

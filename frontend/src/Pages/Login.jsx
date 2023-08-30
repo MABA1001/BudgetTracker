@@ -9,13 +9,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Container } from '@mui/material';
-import { loginUser } from '../Services/services';
+import { getUserDetail, loginUser } from '../Services/services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './../Context/AuthContext';
+import { useUserDetail } from './../Context/userDetailContext';
 
 export default function LogIn() {
-  const { token, setAuthToken } = useAuth();
+  const { setAuthToken } = useAuth();
+  const { setUserDetail } = useUserDetail();
   const navigate = useNavigate();
   const handleSubmit = async event => {
     event.preventDefault();
@@ -37,6 +39,16 @@ export default function LogIn() {
         position: toast.POSITION.TOP_CENTER
       });
       console.error('An error occurred:', error);
+    } finally {
+      async function fetchUserData() {
+        try {
+          const userResponse = await getUserDetail();
+          setUserDetail(userResponse.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+      fetchUserData();
     }
   };
 

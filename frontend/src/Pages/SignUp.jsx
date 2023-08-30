@@ -22,7 +22,7 @@ export default function SignUp() {
       .matches(/^[a-zA-Z]*$/, 'First name should only contain letters')
       .required('First name is required'),
     lastName: Yup.string()
-      .matches(/^[a-zA-Z]*$/, 'Lastname should only contain letters')
+      .matches(/^[a-zA-Z]*$/, 'Last name should only contain letters')
       .required('Last name is required'),
     email: Yup.string()
       .email('Invalid email address')
@@ -53,7 +53,6 @@ export default function SignUp() {
 
       if (response && response.data) {
         console.log(response.data);
-        // localStorage.setItem("userToken", JSON.stringify(response.data));
         toast.success('Account Created Successfully!', {
           position: toast.POSITION.TOP_RIGHT
         });

@@ -13,12 +13,14 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { getTransactions, getUserDetail } from '../Services/services';
+import { getTransactions } from '../Services/services';
 import { format, subMonths } from 'date-fns';
+import { useUserDetail } from './../Context/userDetailContext';
 
 export default function Analytics() {
   const [data, setData] = useState([]);
-  const [budgetLimit, setBudgetLimit] = useState(0);
+  const { userDetail } = useUserDetail();
+  const [budgetLimit] = useState(userDetail.budgetLimit);
   const [selectedTab, setSelectedTab] = useState(0);
 
   useEffect(() => {
@@ -28,12 +30,6 @@ export default function Analytics() {
       setData(sortedData);
     };
     fetchData();
-
-    const fetchUserDetail = async () => {
-      const userDetail = await getUserDetail(); // Fetch budgetLimit from user details
-      setBudgetLimit(userDetail.budgetLimit);
-    };
-    fetchUserDetail();
   }, []);
 
   const getLastNMonthsData = n => {
@@ -51,39 +47,13 @@ export default function Analytics() {
   const timeRanges = [
     { label: 'Last Month', months: 1, xAxisTicks: 'auto' },
     { label: 'Last 6 Months', months: 6, xAxisTicks: 6 },
-    { label: 'Last 12 Months', months: 12, xAxisTicks: 12 } // Set desired number of ticks
+    { label: 'Last 12 Months', months: 12, xAxisTicks: 12 }
   ];
 
-  const renderChart = () => {
-    const chartData = getLastNMonthsData(timeRanges[selectedTab].months);
-
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: '5%'
-        }}
-      >
-        <LineChart width={800} height={400} data={chartData}>
-          <XAxis
-            dataKey="date"
-            tickFormatter={date => format(new Date(date), 'MMM dd, yyyy')}
-            ticks={chartData
-              .map(item => item.date)
-              .slice(0, timeRanges[selectedTab].xAxisTicks)}
-          />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="cost" stroke="#8884d8" />
-          <ReferenceLine y={budgetLimit} stroke="red" label="Budget Limit" />
-        </LineChart>
-      </Box>
-    );
-  };
+  const chartData = getLastNMonthsData(timeRanges[selectedTab].months);
+  const xAxisTicks = chartData
+    .map(item => item.date)
+    .slice(0, timeRanges[selectedTab].xAxisTicks);
 
   return (
     <Paper
@@ -107,7 +77,28 @@ export default function Analytics() {
           <Tab label={range.label} key={index} />
         ))}
       </Tabs>
-      {renderChart()}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: '5%'
+        }}
+      >
+        <LineChart width={800} height={400} data={chartData}>
+          <XAxis
+            dataKey="date"
+            tickFormatter={date => format(new Date(date), 'MMM dd, yyyy')}
+            ticks={xAxisTicks}
+          />
+          <YAxis />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="cost" stroke="#8884d8" />
+          <ReferenceLine y={budgetLimit} stroke="red" label="Budget Limit" />
+        </LineChart>
+      </Box>
     </Paper>
   );
 }

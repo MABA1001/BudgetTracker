@@ -3,7 +3,6 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
@@ -31,17 +30,17 @@ function NavBar() {
     setAnchorElUser(null);
   };
 
-  const handleLogout = () => {
+  const goToLogout = () => {
     removeAuthToken();
     setAnchorElUser(null);
     localStorage.removeItem('userToken');
     navigate('/');
   };
 
-  const handleDashboard = () => {
+  const goToDashboard = () => {
     navigate('/Dashboard');
   };
-  const handleAnalytics = () => {
+  const goToAnalytics = () => {
     navigate('/Analytics');
   };
 
@@ -105,11 +104,11 @@ function NavBar() {
                   key={setting}
                   onClick={() => {
                     if (setting === 'Logout') {
-                      handleLogout();
+                      goToLogout();
                     } else if (setting === 'Dashboard') {
-                      handleDashboard();
+                      goToDashboard();
                     } else if (setting === 'Analytics') {
-                      handleAnalytics();
+                      goToAnalytics();
                     } else {
                       handleCloseUserMenu();
                     }

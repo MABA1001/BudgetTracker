@@ -7,7 +7,6 @@ import Dashboard from './Pages/Dashboard';
 import NoPage from './Pages/NoPage';
 import { useAuth } from './Context/AuthContext';
 import Analytics from './Pages/Analytics';
-import { useState } from 'react';
 
 function App() {
   const { token } = useAuth();

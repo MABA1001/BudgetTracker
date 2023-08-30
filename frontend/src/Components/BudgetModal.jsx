@@ -18,7 +18,7 @@ const validationSchema = Yup.object({
   cost: Yup.number().required('Price is required')
 });
 
-const BudgetModal = ({ open, onClose, updatetransactionRecord }) => {
+const BudgetModal = ({ open, onClose, updateTransactionRecord }) => {
   const initialValues = {
     name: '',
     cost: '',
@@ -28,7 +28,7 @@ const BudgetModal = ({ open, onClose, updatetransactionRecord }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await createTransaction(values);
-      updatetransactionRecord(values);
+      updateTransactionRecord(values);
       formik.resetForm();
       onClose();
     } catch (error) {
