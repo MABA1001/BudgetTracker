@@ -47,10 +47,6 @@ export default function Dashboard() {
 
     fetchData();
   }, []);
-  useEffect(() => {
-    checkLimit();
-  }, [transactionData]);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
