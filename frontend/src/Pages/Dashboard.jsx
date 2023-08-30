@@ -26,7 +26,6 @@ export default function Dashboard() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dateFilter, setDateFilter] = React.useState(dayjs(new Date()));
-  const [filteredData, setFilteredData] = useState([]);
   const { userDetail } = useUserDetail();
 
   const columns = [
@@ -41,7 +40,6 @@ export default function Dashboard() {
       try {
         const response = await getTransactions();
         SetTransactionData(response.data);
-        setFilteredData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -49,6 +47,9 @@ export default function Dashboard() {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    checkLimit();
+  }, [transactionData]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -68,15 +69,11 @@ export default function Dashboard() {
 
   const handleUpdatedData = row => {
     SetTransactionData(prevTrans => [...prevTrans, row]);
-    setFilteredData(prevTrans => [...prevTrans, row]);
     checkLimit();
   };
 
   const handleDeleteRecord = id => {
     SetTransactionData(prevTrasactions =>
-      prevTrasactions.filter(trans => trans._id !== id)
-    );
-    setFilteredData(prevTrasactions =>
       prevTrasactions.filter(trans => trans._id !== id)
     );
   };
@@ -85,21 +82,11 @@ export default function Dashboard() {
     try {
       const response = await getTransactions();
       SetTransactionData(response.data);
-      setFilteredData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       checkLimit();
     }
-  };
-
-  const handleFilterClick = async () => {
-    const filteredTransactions = transactionData.filter(transaction => {
-      const transactionDate = dayjs(transaction.date.split('T')[0]);
-      return transactionDate.isSame(dateFilter, 'day');
-    });
-    setFilteredData(filteredTransactions);
-    setPage(0);
   };
 
   const checkLimit = () => {
@@ -145,7 +132,7 @@ export default function Dashboard() {
               />
               <Button
                 variant="contained"
-                onClick={handleFilterClick}
+                onClick={null}
                 sx={{ bgcolor: '#FDC414', color: 'black' }}
               >
                 Filter Records
@@ -185,7 +172,11 @@ export default function Dashboard() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData
+            {transactionData
+              .filter(transaction => {
+                const transactionDate = dayjs(transaction.date.split('T')[0]);
+                return transactionDate.isSame(dateFilter, 'day');
+              })
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, rowIndex) => {
                 return (
