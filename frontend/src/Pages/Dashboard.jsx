@@ -9,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { toast } from 'react-toastify';
-import { getTransactions } from '../Services/services';
+import { getTransactions } from '../Services/user';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 import BudgetModal from '../Components/BudgetModal';
@@ -126,13 +126,6 @@ export default function Dashboard() {
                 value={dateFilter}
                 onChange={newValue => setDateFilter(newValue)}
               />
-              <Button
-                variant="contained"
-                onClick={null}
-                sx={{ bgcolor: '#FDC414', color: 'black' }}
-              >
-                Filter Records
-              </Button>
             </DemoContainer>
           </LocalizationProvider>
         </Box>

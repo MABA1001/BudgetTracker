@@ -9,20 +9,6 @@ const getAuthHeaders = () => ({
   }
 });
 
-// USERS
-export function loginUser(user) {
-  return api.post('/user/login', user);
-}
-
-export function signupUser(user) {
-  return api.post('/user/signup', user);
-}
-
-export function getUserDetail() {
-  return api.get('/user', getAuthHeaders());
-}
-
-// TRANSACTIONS
 export function getTransactions() {
   return api.get('/transaction', getAuthHeaders());
 }

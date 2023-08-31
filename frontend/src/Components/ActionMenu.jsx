@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { deleteTransaction } from '../Services/services';
+import { deleteTransaction } from '../Services/user';
 import Box from '@mui/material/Box';
 import EditModal from './EditModal';
 import { useState } from 'react';

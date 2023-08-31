@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { format } from 'date-fns';
-import { createTransaction } from '../Services/services';
+import { createTransaction } from '../Services/user';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),

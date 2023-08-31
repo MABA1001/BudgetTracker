@@ -18,11 +18,7 @@ function App() {
         <Route path="/" element={<LogIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         {token ? <Route path="/Analytics" element={<Analytics />} /> : null}
-        {token ? (
-          <Route path="/Dashboard" element={<Dashboard />} />
-        ) : (
-          <Route path="/" element={<LogIn />} />
-        )}
+        {token ? <Route path="/Dashboard" element={<Dashboard />} /> : null}
         <Route path="*" element={<NoPage />} />
       </Routes>
     </>

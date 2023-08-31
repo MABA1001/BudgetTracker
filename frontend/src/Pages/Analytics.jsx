@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { getTransactions } from '../Services/services';
+import { getTransactions } from '../Services/user';
 import { format, subMonths } from 'date-fns';
 import { useUserDetail } from './../Context/userDetailContext';
 
